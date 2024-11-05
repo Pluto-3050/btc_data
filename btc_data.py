@@ -7,8 +7,6 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import csv
-
-
 # Initialisation du service ChromeDriver
 service_obj = Service(ChromeDriverManager().install())
 
@@ -26,6 +24,13 @@ driver = webdriver.Chrome(service=service_obj, options=options)
 
 # Accès à la page Web
 driver.get("https://coinmarketcap.com/currencies/bitcoin/historical-data/")
+
+# Création et écriture des en-têtes dans le fichier CSV
+with open("btc_historical_data.csv", "w", newline='') as file:
+    writer = csv.writer(file)
+    writer.writerow(["count", "date", "price_open", "price_high",
+                     "price_low", "price_close", "volume", "market_cap"])
+
 
 # Configuration de l'attente explicite
 wait = WebDriverWait(driver,20)
@@ -55,14 +60,30 @@ def get_btc_info():
             date = wait.until(EC.presence_of_element_located((By.XPATH, f"//div[@class='history']/div[2]/table/tbody/tr[{index}]/td[1]"))).text
             price_open = wait.until(EC.presence_of_element_located((By.XPATH, f"//div[@class='history']/div[2]/table/tbody/tr[{index}]/td[2]"))).text
             price_high = wait.until(EC.presence_of_element_located((By.XPATH, f"//div[@class='history']/div[2]/table/tbody/tr[{index}]/td[3]"))).text
-            price_low = wait.untatil(EC.presence_of_element_located((By.XPATH, f"//div[@class='history']/div[2]/table/tbody/tr[{index}]/td[4]"))).text
+            price_low = wait.until(EC.presence_of_element_located((By.XPATH, f"//div[@class='history']/div[2]/table/tbody/tr[{index}]/td[4]"))).text
             price_close = wait.until(EC.presence_of_element_located((By.XPATH, f"//div[@class='history']/div[2]/table/tbody/tr[{index}]/td[5]"))).text
             volume = wait.until(EC.presence_of_element_located((By.XPATH, f"//div[@class='history']/div[2]/table/tbody/tr[{index}]/td[6]"))).text
             market_cap = wait.until(EC.presence_of_element_located((By.XPATH, f"//div[@class='history']/div[2]/table/tbody/tr[{index}]/td[7]"))).text
 
             # Affichage des données extraites
-            print(f" Ligne {index} : Date= {date}, Open= {price_open}, High= {price_high}, Low= {price_low}, Close= {price_close}, Volume= {volume}, Market Cap= {market_cap}")
-        
+            #print(f" Ligne {index} : Date= {date}, Open= {price_open}, High= {price_high}, Low= {price_low}, Close= {price_close}, Volume= {volume}, Market Cap= {market_cap}")
+            btcDataList = [
+                 index,
+                 date,
+                 price_open,
+                 price_high,
+                 price_low,
+                 price_close,
+                 volume,
+                 market_cap
+            ]
+
+            with open("btc_historical_data.csv", "a", newline='') as file:
+                        writer = csv.writer(file)
+                        writer.writerow(btcDataList)
+
+            print(btcDataList)
+
         except Exception as e:
             print(f"Erreur dans la ligne {index} : {e}")
 
