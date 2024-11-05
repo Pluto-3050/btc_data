@@ -1,5 +1,7 @@
 # Bitcoin Historical Data Scraping with Selenium in Python
 
+# source code file in: btc_data.py
+
 ## Overview
 As a crypto enthusiast, I created this project to demonstrate how Python and Selenium can be used to automate the retrieval of Bitcoin’s historical price data from the CoinMarketCap website. My goal was to show how to efficiently collect all available data on Bitcoin’s prices from its inception, without manually browsing. The project uses a Chrome WebDriver to access the page, click the "Load More" button to gather all historical data entries, and finally saves the structured data into a CSV file format, ready for analysis and further insights.
 
